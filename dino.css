@@ -1,0 +1,10 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+#game-board {
+    background-color: lightgrey;
+    height: 200px;
+    width: 500px;
+}
