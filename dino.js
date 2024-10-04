@@ -1,44 +1,36 @@
 const canvas = document.getElementById("game-board");
 const ctx = canvas.getContext("2d");
+const gameWidth = canvas.width;
+const gameHeight = canvas.height;
+const dinoWidth = 88 / 2;
+const dinoHeight = 94 / 2;
+const DINO_X_POSITION = 10;
+const DINO_Y_POSITION = gameHeight - dinoHeight
 
-//game status
 let gameOver = false;
 let score = 0;
-
-//game-board
-gameWidth = canvas.width;
-gameHeight = canvas.height;
-
-//dino
-dinoWidth = 88 / 2;
-dinoHeight = 94 / 2;
-
 let dino = {
-    x : 10,
-    y : gameHeight - dinoHeight,
+    x : DINO_X_POSITION,
+    y : DINO_Y_POSITION,
     width : dinoWidth,
     height : dinoHeight,
     jump : 0,
     gravity : .5 
 }
 
-//cactus
 let cacti = [];
-
-let cactus1Image = new Image();
+const cactus1Image = new Image();
 cactus1Image.src = "./images/cactus1.png";
-let cactus1Width = 30 / 2;
-let cactus1Height = 70 / 2;
-
-let cactus2Image = new Image();
+const cactus1Width = 30 / 2;
+const cactus1Height = 70 / 2;
+const cactus2Image = new Image();
 cactus2Image.src = "./images/cactus2.png";
-let cactus2Width = 69 / 2;
-let cactus2Height = 70 / 2;
-
-let cactus3Image = new Image();
+const cactus2Width = 69 / 2;
+const cactus2Height = 70 / 2;
+const cactus3Image = new Image();
 cactus3Image.src = "./images/cactus3.png";
-let cactus3Width = 102 / 2;
-let cactus3Height = 70 / 2;
+const cactus3Width = 102 / 2;
+const cactus3Height = 70 / 2;
 
 window.onload = function() {
     if(gameOver) {
@@ -54,14 +46,12 @@ function update() {
     }
     clear();
     drawDino();
-    drawCactus();
     drawScore();
     applyGravity();
     updateCactus();
     checkCollision();
     requestAnimationFrame(update);
 }
-
 requestAnimationFrame(update);
 
 function clear() {
@@ -77,49 +67,38 @@ function drawDino() {
 
 function createCactus() {
     let random = Math.floor(Math.random() * 3 + 1);
+    let cactus = {
+        image : null,
+        x : gameWidth,
+        y : null,
+        width : null,
+        height : null,
+        velocity : 4
+    }
     if (random == 1) {
-        let cactus = {
-            image : cactus1Image,
-            x : gameWidth,
-            y : gameHeight - cactus1Height,
-            width : cactus1Width,
-            height : cactus1Height,
-            velocity : 3
-        }
-        cacti.push(cactus);
+        cactus.image = cactus1Image
+        cactus.y = gameHeight - cactus1Height
+        cactus.width = cactus1Width
+        cactus.height = cactus1Height
     } else if (random == 2) {
-        let cactus = {
-            image : cactus2Image,
-            x : gameWidth,
-            y : gameHeight - cactus2Height,
-            width : cactus2Width,
-            height : cactus2Height,
-            velocity : 3
-        }
-        cacti.push(cactus);
+        cactus.image = cactus2Image
+        cactus.y = gameHeight - cactus2Height
+        cactus.width = cactus2Width
+        cactus.height = cactus2Height
     } else if (random == 3) {
-        let cactus = {
-            image : cactus3Image,
-            x : gameWidth,
-            y : gameHeight - cactus3Height,
-            width : cactus3Width,
-            height : cactus3Height,
-            velocity : 3
-        }
-        cacti.push(cactus);
+        cactus.image = cactus3Image
+        cactus.y = gameHeight - cactus3Height
+        cactus.width = cactus3Width
+        cactus.height = cactus3Height
     }
-}
-
-function drawCactus() {
-    for (let i = 0; i < cacti.length; ++i) {
-        ctx.drawImage(cacti[i].image, cacti[i].x, cacti[i].y, cacti[i].width, cacti[i].height);
-    }
+    cacti.push(cactus)
 }
 
 function updateCactus() {
     for (let i = 0; i < cacti.length; ++i) {
         if (cacti[i].x > -50) {
             cacti[i].x -= cacti[i].velocity;
+            ctx.drawImage(cacti[i].image, cacti[i].x, cacti[i].y, cacti[i].width, cacti[i].height);
         } else {
             cacti.splice(cacti[i], 1);
         }
